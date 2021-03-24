@@ -18,19 +18,38 @@ export type TaskStateType = {
 
 export function App () {
 
+	const todolistId1 = v1 ();
+	const todolistId2 = v1 ();
+	// массив тудулистов
+	const [todolists, setTodolists] = useState<Array<TodolistType>> ( [
+		{ id:todolistId1, title:"What to learn", filter:"all" },
+		{ id:todolistId2, title:"What to bye", filter:"all" },
+	] )
+	// ассоциативный массив
+	const [tasks, setTasks] = useState<TaskStateType> ( {
+		[ todolistId1 ]:[
+			{ id:v1 (), title:"HTML", isDone:true },
+			{ id:v1 (), title:"CSS", isDone:false },
+			{ id:v1 (), title:"JavaScript", isDone:false },
+		],
+		[ todolistId2 ]:[
+			{ id:v1 (), title:"Book", isDone:true },
+			{ id:v1 (), title:"Pen", isDone:false },
+			{ id:v1 (), title:"Notebook", isDone:false },
+		],
+	} )
+
 	function removeTask ( id : string, todolistId : string ) {
 		let todolistTasks = tasks[ todolistId ];
 		tasks[ todolistId ] = todolistTasks.filter ( t => t.id !== id );
 		setTasks ( { ...tasks } );
 	}
-
 	function addTask ( title : string, todolistId : string ) {
 		let todolistTasks = tasks[ todolistId ];
 		let newTask = { id:v1 (), title:title, isDone:false };
 		tasks[ todolistId ] = [newTask, ...todolistTasks];
 		setTasks ( { ...tasks } );
 	}
-
 	function changeTaskStatus ( id : string, isDone : boolean, todolistId : string ) {
 		// достаём нужный массив по todolistId
 		let todolistTasks = tasks[ todolistId ];
@@ -51,52 +70,12 @@ export function App () {
 		setTasks ( { ...tasks } );
 	}
 
-	function changeFilter ( value : FilteredType, todolistId : string ) {
-		let todolistFilter = todolists.find ( tl => tl.id === todolistId );
-		if (todolistFilter) {
-			todolistFilter.filter = value;
-			setTodolists ( [...todolists] );
-		}
-	}
-
 	function removeTodolist ( id : string ) {
 		let filteredTodolist = todolists.filter ( tl => tl.id !== id );
 		setTodolists ( filteredTodolist );
 		delete tasks[ id ];
 		setTasks ( { ...tasks } );
 	}
-
-	function changeTodolistTitle ( id : string, newTitle : string ) {
-		const todolist = todolists.find ( tl => tl.id === id );
-		if (todolist) {
-			todolist.title = newTitle;
-			setTodolists ( [...todolists] );
-		}
-	}
-
-	const todolistId1 = v1 ();
-	const todolistId2 = v1 ();
-
-	// массив тудулистов
-	const [todolists, setTodolists] = useState<Array<TodolistType>> ( [
-		{ id:todolistId1, title:"What to learn", filter:"all" },
-		{ id:todolistId2, title:"What to bye", filter:"all" },
-	] )
-
-	// ассоциативный массив
-	const [tasks, setTasks] = useState<TaskStateType> ( {
-		[ todolistId1 ]:[
-			{ id:v1 (), title:"HTML", isDone:true },
-			{ id:v1 (), title:"CSS", isDone:false },
-			{ id:v1 (), title:"JavaScript", isDone:false },
-		],
-		[ todolistId2 ]:[
-			{ id:v1 (), title:"Book", isDone:true },
-			{ id:v1 (), title:"Pen", isDone:false },
-			{ id:v1 (), title:"Notebook", isDone:false },
-		],
-	} )
-
 	function addTodolist ( title : string ) {
 		let todolist : TodolistType = { id:v1 (), filter:"all", title:title };
 		setTodolists ( [todolist, ...todolists] );
@@ -104,6 +83,20 @@ export function App () {
 			...tasks,
 			[ todolist.id ]:[]
 		} )
+	}
+	function changeTodolistTitle ( id : string, title : string ) {
+		const todolist = todolists.find ( tl => tl.id === id );
+		if (todolist) {
+			todolist.title = title;
+			setTodolists ( [...todolists] );
+		}
+	}
+	function changeTodolistFilter ( filter : FilteredType, id : string ) {
+		let todolistFilter = todolists.find ( tl => tl.id === id );
+		if (todolistFilter) {
+			todolistFilter.filter = filter;
+			setTodolists ( [...todolists] );
+		}
 	}
 
 	return (
@@ -143,7 +136,7 @@ export function App () {
 											title={ tl.title }
 											tasks={ tasksForTodolist }
 											removeTask={ removeTask }
-											changeFilter={ changeFilter }
+											changeTodolistFilter={ changeTodolistFilter }
 											addTask={ addTask }
 											changeTaskStatus={ changeTaskStatus }
 											changeTaskTitle={ changeTaskTitle }
