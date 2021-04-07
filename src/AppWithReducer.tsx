@@ -68,7 +68,6 @@ export function AppWithReducer () {
 	function removeTodolist ( id : string ) {
 		const action = removeTodolistAC ( id );
 		dispatchToTodolists ( action );
-		dispatchToTasks ( action );
 	}
 	function addTodolist ( title : string ) {
 		const action = addTodolistAC ( title );
