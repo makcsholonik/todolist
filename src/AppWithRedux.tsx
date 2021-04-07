@@ -24,7 +24,7 @@ export type TaskStateType = {
 	[ key : string ] : Array<TasksType>
 }
 
-export function AppWithReducer () {
+export function AppWithRedux () {
 
 	const todolistId1 = v1 ();
 	const todolistId2 = v1 ();
@@ -68,7 +68,6 @@ export function AppWithReducer () {
 	function removeTodolist ( id : string ) {
 		const action = removeTodolistAC ( id );
 		dispatchToTodolists ( action );
-		dispatchToTasks ( action );
 	}
 	function addTodolist ( title : string ) {
 		const action = addTodolistAC ( title );
