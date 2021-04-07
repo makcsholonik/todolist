@@ -15,7 +15,7 @@ export type TodolistType = {
 	title : string
 	tasks : Array<TasksType>
 	removeTask : ( id : string, todolistId : string ) => void
-	changeTodolistFilter : ( value : FilteredType, todolistId : string ) => void
+	changeTodolistFilter : ( todolistId : string, value : FilteredType ) => void
 	addTask : ( title : string, todolistId : string ) => void
 	changeTaskStatus : ( id : string, isDone : boolean, todolistId : string ) => void
 	changeTaskTitle : ( id : string, newTitle : string, todolistId : string ) => void
@@ -26,9 +26,9 @@ export type TodolistType = {
 
 export function Todolist ( props : TodolistType ) {
 
-	const onAllClickHandler = () => {props.changeTodolistFilter ( "all", props.id )};
-	const onActiveClickHandler = () => {props.changeTodolistFilter ( "active", props.id )};
-	const onCompletedClickHandler = () => {props.changeTodolistFilter ( "completed", props.id )};
+	const onAllClickHandler = () => {props.changeTodolistFilter ( props.id, "all" )};
+	const onActiveClickHandler = () => {props.changeTodolistFilter ( props.id, "active", )};
+	const onCompletedClickHandler = () => {props.changeTodolistFilter ( props.id, "completed", )};
 	const removeTodolist = () => {props.removeTodolist ( props.id )};
 	const changeTodolistTitle = ( newTitle : string ) => {props.changeTodolistTitle ( props.id, newTitle )};
 

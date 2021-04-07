@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
 import { TasksType, Todolist } from "./Todolist";
 import { v1 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
-import { AppBar, Button, Container, IconButton, Toolbar, Typography, Grid, Paper } from "@material-ui/core";
+import { AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
+import {
+	addTodolistAC,
+	changeTodolistFilterAC,
+	changeTodolistTitleAC,
+	removeTodolistAC,
+	todolistsReducer
+} from "./state/todolists-reducer";
+import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer } from "./state/tasks-reducer";
 
 export type FilteredType = "all" | "active" | "completed";
 export type TodolistType = {
@@ -16,17 +24,18 @@ export type TaskStateType = {
 	[ key : string ] : Array<TasksType>
 }
 
-export function App () {
+export function AppWithReducer () {
 
 	const todolistId1 = v1 ();
 	const todolistId2 = v1 ();
+
 	// массив тудулистов
-	const [todolists, setTodolists] = useState<Array<TodolistType>> ( [
+	const [todolists, dispatchToTodolists] = useReducer ( todolistsReducer, [
 		{ id : todolistId1, title : "What to learn", filter : "all" },
 		{ id : todolistId2, title : "What to bye", filter : "all" },
 	] )
 	// ассоциативный массив
-	const [tasks, setTasks] = useState<TaskStateType> ( {
+	const [tasks, dispatchToTasks] = useReducer ( tasksReducer, {
 		[ todolistId1 ] : [
 			{ id : v1 (), title : "HTML", isDone : true },
 			{ id : v1 (), title : "CSS", isDone : false },
@@ -40,63 +49,38 @@ export function App () {
 	} )
 
 	function removeTask ( id : string, todolistId : string ) {
-		let todolistTasks = tasks[ todolistId ];
-		tasks[ todolistId ] = todolistTasks.filter ( t => t.id !== id );
-		setTasks ( { ...tasks } );
+		const action = removeTaskAC ( id, todolistId );
+		dispatchToTasks ( action );
 	}
 	function addTask ( title : string, todolistId : string ) {
-		let todolistTasks = tasks[ todolistId ];
-		let newTask = { id : v1 (), title : title, isDone : false };
-		tasks[ todolistId ] = [newTask, ...todolistTasks];
-		setTasks ( { ...tasks } );
+		const action = addTaskAC ( title, todolistId );
+		dispatchToTasks ( action );
 	}
 	function changeTaskStatus ( id : string, isDone : boolean, todolistId : string ) {
-		// достаём нужный массив по todolistId
-		let todolistTasks = tasks[ todolistId ];
-		// найдём нужную таску
-		let task = todolistTasks.find ( t => t.id === id );
-		// изменим таску если она нашлась
-		if (task) {
-			task.isDone = isDone;
-		}
-		setTasks ( { ...tasks } );
+		const action = changeTaskStatusAC ( id, isDone, todolistId );
+		dispatchToTasks ( action );
 	}
 	function changeTaskTitle ( id : string, newTitle : string, todolistId : string ) {
-		let todolistTasks = tasks[ todolistId ];
-		let task = todolistTasks.find ( t => t.id === id );
-		if (task) {
-			task.title = newTitle;
-		}
-		setTasks ( { ...tasks } );
+		const action = changeTaskTitleAC ( id, newTitle, todolistId );
+		dispatchToTasks ( action );
 	}
 
 	function removeTodolist ( id : string ) {
-		let filteredTodolist = todolists.filter ( tl => tl.id !== id );
-		setTodolists ( filteredTodolist );
-		delete tasks[ id ];
-		setTasks ( { ...tasks } );
+		const action = removeTodolistAC ( id );
+		dispatchToTodolists ( action );
 	}
 	function addTodolist ( title : string ) {
-		let todolist : TodolistType = { id : v1 (), filter : "all", title : title };
-		setTodolists ( [todolist, ...todolists] );
-		setTasks ( {
-			...tasks,
-			[ todolist.id ] : []
-		} )
+		const action = addTodolistAC ( title );
+		dispatchToTodolists ( action );
+		dispatchToTasks ( action );
 	}
 	function changeTodolistTitle ( id : string, title : string ) {
-		const todolist = todolists.find ( tl => tl.id === id );
-		if (todolist) {
-			todolist.title = title;
-			setTodolists ( [...todolists] );
-		}
+		const action = changeTodolistTitleAC ( id, title );
+		dispatchToTodolists ( action );
 	}
 	function changeTodolistFilter ( id : string, filter : FilteredType ) {
-		let todolistFilter = todolists.find ( tl => tl.id === id );
-		if (todolistFilter) {
-			todolistFilter.filter = filter;
-			setTodolists ( [...todolists] );
-		}
+		const action = changeTodolistFilterAC ( id, filter );
+		dispatchToTodolists ( action );
 	}
 
 	return (

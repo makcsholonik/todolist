@@ -1,5 +1,5 @@
 
-type StateTYpe = {
+export type StateType = {
 	age : number
 	childrenCount : number
 	name : string
@@ -11,7 +11,7 @@ type ActionType = {
 
 // меня вызовут и дадут мне state (почти всегда объект) и инструкцию action (объект) согласно прописанному type в этом action я поменяю state
 
-export const userReducer = ( state : StateTYpe, action : ActionType ) => {
+export const userReducer = ( state : StateType, action : ActionType ) => {
 	switch (action.type) {
 		case "INCREMENT-AGE":
 			let newState = {...state} // делаем копию
