@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useCallback } from "react";
-import { FilteredType } from "./App";
 import { AddItemForm } from "./AddItemForm";
 import { EditableSpan } from "./EditableSpan";
 import { Button, IconButton, Checkbox } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
+import { FilteredType } from "./AppWithRedux";
 
 export type TasksType = {
 	id : string
@@ -24,17 +24,19 @@ export type TodolistType = {
 	changeTodolistTitle : ( id : string, newTitle : string ) => void
 }
 
-export const Todolist = React.memo(function ( props : TodolistType )  {
-	console.log ("Todolist called");
-	const onAllClickHandler = () => {props.changeTodolistFilter ( props.id, "all" )};
-	const onActiveClickHandler = () => {props.changeTodolistFilter ( props.id, "active", )};
-	const onCompletedClickHandler = () => {props.changeTodolistFilter ( props.id, "completed", )};
+export const Todolist = React.memo ( function ( props : TodolistType ) {
+	console.log ( "Todolist called" );
+	const onAllClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "all" )}, [props.changeTodolistFilter, props.id] );
+	const onActiveClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "active", )}, [props.changeTodolistFilter, props.id] );
+	const onCompletedClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "completed", )}, [props.changeTodolistFilter, props.id] );
+
 	const removeTodolist = () => {props.removeTodolist ( props.id )};
 	const changeTodolistTitle = ( newTitle : string ) => {props.changeTodolistTitle ( props.id, newTitle )};
-	const addItem = useCallback( ( title : string ) => {
+	const addItem = useCallback ( ( title : string ) => {
 		props.addTask ( title, props.id );
-	}, []);
+	}, [props.addTask, props.id] );
 
+	let tasksForTodolist = props.tasks;
 	if (props.filter === "completed") {
 		tasksForTodolist = props.tasks.filter ( t => t.isDone );
 	}
@@ -97,5 +99,4 @@ export const Todolist = React.memo(function ( props : TodolistType )  {
 			</div>
 		</div>
 	);
-})
-
+} );

@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { AppWithRedux } from './AppWithRedux';
 import * as serviceWorker from './serviceWorker';
-import { Provider } from "react-redux";
-import { store } from "./state/store";
+import { store } from './state/store';
+import { Provider } from 'react-redux';
+import { AppWithRedux } from './AppWithRedux';
 
 
-// чтобы компонента могла пользовотся store её надо обернуть в тег - <Provider store={store}></Provider>
 ReactDOM.render (
-	<Provider store={store} >
+	<Provider store={ store }>
 		<AppWithRedux/>
 	</Provider>, document.getElementById ( 'root' ) );
 
