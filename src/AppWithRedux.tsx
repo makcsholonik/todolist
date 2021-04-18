@@ -25,7 +25,7 @@ export type TaskStateType = {
 	[ key : string ] : Array<TasksType>
 }
 
-export function AppWithRedux () {
+export const AppWithRedux = React.memo (function () {
 
 	const todolists = useSelector<AppRootStateType, Array<TodolistType>> ( state => state.todolist );
 	const tasks = useSelector<AppRootStateType, TaskStateType> ( state => state.tasks );
@@ -113,4 +113,4 @@ export function AppWithRedux () {
 			</Container>
 		</div>
 	);
-}
+});
