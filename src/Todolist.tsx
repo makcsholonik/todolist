@@ -37,6 +37,7 @@ export const Todolist = React.memo ( function ( props : TodolistType ) {
 		props.addTask ( title, props.id );
 	}, [props.addTask, props.id] );
 
+	// support
 	let tasksForTodolist = props.tasks;
 	if (props.filter === "completed") {
 		tasksForTodolist = props.tasks.filter ( t => t.isDone );

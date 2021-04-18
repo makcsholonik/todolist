@@ -25,7 +25,8 @@ export type TaskStateType = {
 	[ key : string ] : Array<TasksType>
 }
 
-export const AppWithRedux = React.memo (function () {
+//support
+export const AppWithRedux = React.memo ( function () {
 
 	const todolists = useSelector<AppRootStateType, Array<TodolistType>> ( state => state.todolist );
 	const tasks = useSelector<AppRootStateType, TaskStateType> ( state => state.tasks );
@@ -84,14 +85,14 @@ export const AppWithRedux = React.memo (function () {
 				<Grid container spacing={ 2 }>
 					{
 						todolists.map ( tl => {
+							//support
 							let allTodolistTasks = tasks[ tl.id ]
 							let tasksForTodolist = allTodolistTasks;
 
 							return (
-								<Grid item>
+								<Grid item key={ tl.id }>
 									<Paper style={ { padding : "10px" } }>
 										<Todolist
-											key={ tl.id } // обязательно при .map
 											id={ tl.id }
 											title={ tl.title }
 											tasks={ tasksForTodolist }
@@ -113,4 +114,4 @@ export const AppWithRedux = React.memo (function () {
 			</Container>
 		</div>
 	);
-});
+} );
