@@ -26,7 +26,6 @@ export type TodolistType = {
 }
 
 export const Todolist = React.memo ( function ( props : TodolistType ) {
-	console.log ( "Todolist called" );
 	const onAllClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "all" )}, [props.changeTodolistFilter, props.id] );
 	const onActiveClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "active", )}, [props.changeTodolistFilter, props.id] );
 	const onCompletedClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "completed", )}, [props.changeTodolistFilter, props.id] );
@@ -37,7 +36,6 @@ export const Todolist = React.memo ( function ( props : TodolistType ) {
 		props.addTask ( title, props.id );
 	}, [props.addTask, props.id] );
 
-	// support
 	let tasksForTodolist = props.tasks;
 	if (props.filter === "completed") {
 		tasksForTodolist = props.tasks.filter ( t => t.isDone );
@@ -57,7 +55,7 @@ export const Todolist = React.memo ( function ( props : TodolistType ) {
 			<AddItemForm addItem={ addItem }/>
 			<ul>
 				{
-					props.tasks.map ( t => <Task
+					tasksForTodolist.map ( t => <Task
 						key={ t.id }
 						task={ t }
 						changeTaskStatus={ props.changeTaskStatus }
