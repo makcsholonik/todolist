@@ -6,7 +6,10 @@ export default {
 }
 
 const settings = {
-	withCredentials : true // * залогинен
+	withCredentials : true, // * залогинен
+	headers: {
+		"API-KEY": "f0cc0942-0306-4a5b-86b9-c3852c7f7cf3"
+	}
 }
 export const GetTodolists = () => {
 	const [state, setState] = useState<any> ( null )
@@ -26,14 +29,23 @@ export const GetTodolists = () => {
 }
 // * axios сделай get запрос (указываем адрес), также передаём настройки
 // * запрос нам возращает promise и далее мы попадаем в promise.then
+// * в get запросе 2 параметра - URL и settings
+// * при get запросе API-KEY не обазателен
 
 export const CreateTodolist = () => {
 	const [state, setState] = useState<any> ( null )
 	useEffect ( () => {
+		axios.post ( "https://social-network.samuraijs.com/api/1.1/todo-lists", { title : "Max Todolist" }, settings ).
+			then ( ( res ) => {
+				setState ( res.data )
+			} )
 	}, [] )
 
 	return <div> { JSON.stringify ( state ) }</div>
 }
+// * в post запросе 3 параметра - URL, payload и settings
+// * при get запросе API-KEY - ОБЯЗАТЕЛЕН
+
 export const DeleteTodolist = () => {
 	const [state, setState] = useState<any> ( null )
 	useEffect ( () => {
@@ -41,6 +53,7 @@ export const DeleteTodolist = () => {
 
 	return <div> { JSON.stringify ( state ) }</div>
 }
+
 export const UpdateTodolistTitle = () => {
 	const [state, setState] = useState<any> ( null )
 	useEffect ( () => {
