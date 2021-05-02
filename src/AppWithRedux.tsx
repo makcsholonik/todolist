@@ -85,13 +85,13 @@ export const AppWithRedux = React.memo ( function () {
 				<Grid container spacing={ 2 }>
 					{
 						todolists.map ( tl => {
-							//support
-							let tasksForTodolist =  tasks[ tl.id ];
+							let tasksForTodolist = tasks[ tl.id ];
 
 							return (
 								<Grid item key={ tl.id }>
 									<Paper style={ { padding : "10px" } }>
 										<Todolist
+											key={ tl.id }
 											id={ tl.id }
 											title={ tl.title }
 											tasks={ tasksForTodolist }
