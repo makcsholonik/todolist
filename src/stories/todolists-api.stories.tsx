@@ -7,8 +7,8 @@ export default {
 
 const settings = {
 	withCredentials : true, // * залогинен
-	headers: {
-		"API-KEY": "f0cc0942-0306-4a5b-86b9-c3852c7f7cf3"
+	headers : {
+		"API-KEY" : "f0cc0942-0306-4a5b-86b9-c3852c7f7cf3"
 	}
 }
 export const GetTodolists = () => {
@@ -48,7 +48,8 @@ export const CreateTodolist = () => {
 export const DeleteTodolist = () => {
 	const [state, setState] = useState<any> ( null )
 	useEffect ( () => {
-		axios.delete ( "https://social-network.samuraijs.com/api/1.1/todo-lists/3f12fce2-809d-4119-bf9b-368f220b5236", settings ).
+		const todolistId = "todo-lists/3f12fce2-809d-4119-bf9b-368f220b5236";
+		axios.delete ( `https://social-network.samuraijs.com/api/1.1/${ todolistId }`, settings ).
 			then ( ( res ) => {
 				setState ( res.data )
 			} )
@@ -59,7 +60,11 @@ export const DeleteTodolist = () => {
 export const UpdateTodolistTitle = () => {
 	const [state, setState] = useState<any> ( null )
 	useEffect ( () => {
+		const todolistId = "todo-lists/5ae0baaa-9cbe-409c-8ebb-f21945574cb8";
+		axios.put ( `https://social-network.samuraijs.com/api/1.1/${ todolistId }`, { title : "Hello, Max" }, settings ).
+			then ( ( res ) => {
+				setState ( res.data )
+			} )
 	}, [] )
-
 	return <div> { JSON.stringify ( state ) }</div>
 }
