@@ -40,7 +40,6 @@ export const CreateTodolist = () => {
 				setState ( res.data )
 			} )
 	}, [] )
-
 	return <div> { JSON.stringify ( state ) }</div>
 }
 // * в post запросе 3 параметра - URL, payload и settings
@@ -49,8 +48,11 @@ export const CreateTodolist = () => {
 export const DeleteTodolist = () => {
 	const [state, setState] = useState<any> ( null )
 	useEffect ( () => {
+		axios.delete ( "https://social-network.samuraijs.com/api/1.1/todo-lists/3f12fce2-809d-4119-bf9b-368f220b5236", settings ).
+			then ( ( res ) => {
+				setState ( res.data )
+			} )
 	}, [] )
-
 	return <div> { JSON.stringify ( state ) }</div>
 }
 
