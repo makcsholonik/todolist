@@ -34,12 +34,20 @@ export const GetTodolists = () => {
 
 export const CreateTodolist = () => {
 	const [state, setState] = useState<any> ( null )
-	useEffect ( () => {
-		todolistAPI.createTodolist ( "max todolist" ).then ( ( res ) => {
+	const [todolistTitle, setTodolistTitle] = useState<string> ( "" )
+	const createTodolist = () => {
+		todolistAPI.createTodolist ( todolistTitle ).then ( ( res ) => {
 			setState ( res.data )
 		} )
-	}, [] )
-	return <div> { JSON.stringify ( state ) }</div>
+	}
+	return (
+		<div> { JSON.stringify ( state ) }
+			<div>
+				<input placeholder={ todolistTitle } onChange={ ( e ) => {setTodolistTitle ( e.currentTarget.value )} }/>
+				<button onClick={ createTodolist }>create todolist</button>
+			</div>
+		</div>
+	)
 }
 // * в post запросе 3 параметра - URL, payload и settings
 // * при get запросе API-KEY - ОБЯЗАТЕЛЕН
@@ -47,7 +55,7 @@ export const CreateTodolist = () => {
 export const DeleteTodolist = () => {
 	const [state, setState] = useState<any> ( null )
 	useEffect ( () => {
-		const todolistId = "7df92cfc-f369-42aa-bfa6-47ae18f9e2a6";
+		const todolistId = "c4a6efde-7003-49ca-a0a6-bcb7b945401d";
 		todolistAPI.deleteTodolist ( todolistId ).then ( ( res ) => {
 			setState ( res.data )
 		} )
@@ -107,7 +115,11 @@ export const DeleteTask = () => {
 // 	useEffect ( () => {
 // 		const todolistId = "c4a6efde-7003-49ca-a0a6-bcb7b945401d";
 // 		const taskId = "22f23e58-7441-46e9-93ce-0862a4226a27"
-// 		tasksAPI.updateTasks ( todolistId, taskId).then ( ( res ) => {
+// 		const model = {
+//
+//
+// 		}
+// 		tasksAPI.updateTasks ( todolistId, taskId, model).then ( ( res ) => {
 // 			setState ( res.data )
 // 		} )
 // 	}, [] )

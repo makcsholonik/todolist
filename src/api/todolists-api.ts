@@ -71,6 +71,16 @@ type GetTasksResponse = {
 	error : string
 }
 
+export type TaskModelType = {
+	title : string
+	description : string
+	completed : true,
+	status : number
+	priority : number
+	startDate : string
+	deadline : string
+}
+
 export const tasksAPI = {
 	getTasks ( todolistId : string ) {
 		return instanse.get<GetTasksResponse> ( `todo-lists/${ todolistId }/tasks` );
@@ -80,8 +90,8 @@ export const tasksAPI = {
 	},
 	deleteTasks ( todolistId : string, taskId : string ) {
 		return instanse.delete<ResponseType> ( `todo-lists/${ todolistId }/tasks/${ taskId }` );
-	}
-// 	updateTasks ( todolistId : string, taskId : string, update: Object ) {
-// 		return instanse.put<TaskResponse> ( `todo-lists/${ todolistId }/tasks/${ taskId }`, {update} );
+	},
+// 	updateTasks ( todolistId : string, taskId : string, model : TaskModelType ) {
+// 		return instanse.put<ResponseType> ( `todo-lists/${ todolistId }/tasks/${ taskId }`, { model } );
 // 	}
 }
