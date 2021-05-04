@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { todolistAPI } from "../api/todolists-api";
+import { tasksAPI, todolistAPI } from "../api/todolists-api";
 
 export default {
-	title : 'API Todolist'
+	title : 'API'
 }
 
 const settings = {
@@ -65,3 +65,51 @@ export const UpdateTodolistTitle = () => {
 	}, [] )
 	return <div> { JSON.stringify ( state ) }</div>
 }
+
+// TASKS
+
+export const GetTasks = () => {
+	const [state, setState] = useState<any> ( null )
+	useEffect ( () => {
+		const todolistId = "c4a6efde-7003-49ca-a0a6-bcb7b945401d";
+		tasksAPI.getTasks ( todolistId ).then ( ( res ) => {
+			setState ( res.data )
+		} )
+	}, [] )
+	return <div> { JSON.stringify ( state ) }</div>
+}
+
+export const CreateTask = () => {
+	const [state, setState] = useState<any> ( null )
+	useEffect ( () => {
+		const todolistId = "c4a6efde-7003-49ca-a0a6-bcb7b945401d";
+		tasksAPI.createTasks ( todolistId, "new task" ).then ( ( res ) => {
+			setState ( res.data )
+		} )
+	}, [] )
+	return <div> { JSON.stringify ( state ) }</div>
+}
+
+export const DeleteTask = () => {
+	const [state, setState] = useState<any> ( null )
+	useEffect ( () => {
+		const todolistId = "c4a6efde-7003-49ca-a0a6-bcb7b945401d";
+		const taskId = "07045488-d47d-44d3-8e4a-15399ec213d4"
+		tasksAPI.deleteTasks ( todolistId, taskId ).then ( ( res ) => {
+			setState ( res.data )
+		} )
+	}, [] )
+	return <div> { JSON.stringify ( state ) }</div>
+}
+
+// export const UpdateTask = () => {
+// 	const [state, setState] = useState<any> ( null )
+// 	useEffect ( () => {
+// 		const todolistId = "c4a6efde-7003-49ca-a0a6-bcb7b945401d";
+// 		const taskId = "22f23e58-7441-46e9-93ce-0862a4226a27"
+// 		tasksAPI.updateTasks ( todolistId, taskId).then ( ( res ) => {
+// 			setState ( res.data )
+// 		} )
+// 	}, [] )
+// 	return <div> { JSON.stringify ( state ) }</div>
+// }
