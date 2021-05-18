@@ -4,8 +4,9 @@ import { v1 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
 import { AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
-import { TaskPriority, TaskStatuses, TaskType } from "./api/todolists-api";
+import { TaskPriority, TaskStatus, TaskType } from "./api/todolists-api";
 import { FilteredType, TodolistDomainType } from "./state/todolists-reducer";
+import { Todolist } from "./Todolist";
 
 
 export type TaskStateType = {
@@ -33,7 +34,7 @@ function App () {
 			{
 				id : v1 (),
 				title : "HTML",
-				status : TaskStatuses.Completed,
+				status : TaskStatus.Completed,
 				todoListId : todolistId1,
 				description : '',
 				startDate : '',
@@ -46,7 +47,7 @@ function App () {
 			{
 				id : v1 (),
 				title : "CSS",
-				status : TaskStatuses.New,
+				status : TaskStatus.New,
 				todoListId : todolistId1,
 				description : '',
 				startDate : '',
@@ -59,7 +60,7 @@ function App () {
 			{
 				id : v1 (),
 				title : "JavaScript",
-				status : TaskStatuses.New,
+				status : TaskStatus.New,
 				todoListId : todolistId1,
 				description : '',
 				startDate : '',
@@ -74,7 +75,7 @@ function App () {
 			{
 				id : v1 (),
 				title : "Book",
-				status : TaskStatuses.Completed,
+				status : TaskStatus.Completed,
 				todoListId : todolistId2,
 				description : '',
 				startDate : '',
@@ -87,7 +88,7 @@ function App () {
 			{
 				id : v1 (),
 				title : "Pen",
-				status : TaskStatuses.New,
+				status : TaskStatus.New,
 				todoListId : todolistId2,
 				description : '',
 				startDate : '',
@@ -100,7 +101,7 @@ function App () {
 			{
 				id : v1 (),
 				title : "Notebook",
-				status : TaskStatuses.Completed,
+				status : TaskStatus.Completed,
 				todoListId : todolistId2,
 				description : '',
 				startDate : '',
@@ -123,7 +124,7 @@ function App () {
 		let newTask = {
 			id : v1 (),
 			title : title,
-			status : TaskStatuses.New,
+			status : TaskStatus.New,
 			todoListId : todolistId,
 			description : '',
 			startDate : '',
@@ -136,7 +137,7 @@ function App () {
 		tasks[ todolistId ] = [newTask, ...todolistTasks];
 		setTasks ( { ...tasks } );
 	}
-	function changeTaskStatus ( id : string, status :TaskStatuses, todolistId : string ) {
+	function changeTaskStatus ( id : string, status : TaskStatus, todolistId : string ) {
 		// достаём нужный массив по todolistId
 		let todolistTasks = tasks[ todolistId ];
 		// найдём нужную таску
@@ -163,7 +164,7 @@ function App () {
 		setTasks ( { ...tasks } );
 	}
 	function addTodolist ( title : string ) {
-		let todolist : TodolistDomainType = { id : v1 (), filter : "all", title : title, addedDate: '', order: 0 };
+		let todolist : TodolistDomainType = { id : v1 (), filter : "all", title : title, addedDate : '', order : '0' };
 		setTodolists ( [todolist, ...todolists] );
 		setTasks ( {
 			...tasks,
@@ -208,10 +209,10 @@ function App () {
 							let allTodolistTasks = tasks[ tl.id ]
 							let tasksForTodolist = allTodolistTasks;
 							if (tl.filter === "completed") {
-								tasksForTodolist = allTodolistTasks.filter ( t => t.status === TaskStatuses.New );
+								tasksForTodolist = allTodolistTasks.filter ( t => t.status === TaskStatus.New );
 							}
 							if (tl.filter === "active") {
-								tasksForTodolist = allTodolistTasks.filter ( t => t.status === TaskStatuses.Completed );
+								tasksForTodolist = allTodolistTasks.filter ( t => t.status === TaskStatus.Completed );
 							}
 							return (
 								<Grid item>

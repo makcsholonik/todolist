@@ -7,24 +7,18 @@ import {
 	addTodolistAC,
 	changeTodolistFilterAC,
 	changeTodolistTitleAC,
+	FilteredType,
 	removeTodolistAC
 } from "./state/todolists-reducer";
 import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from "./state/tasks-reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { AppRootStateType } from "./state/store";
-import { TasksType, Todolist } from './Todolist';
+import { Todolist } from './Todolist';
+import { TaskStatus, TaskType, TodolistType } from "./api/todolists-api";
 
-
-export type FilteredType = "all" | "active" | "completed";
-export type TodolistType = {
-	id : string
-	title : string
-	filter : FilteredType
-}
 export type TaskStateType = {
-	[ key : string ] : Array<TasksType>
+	[ key : string ] : Array<TaskType>
 }
-
 
 export const AppWithRedux = React.memo ( function () {
 
@@ -41,8 +35,8 @@ export const AppWithRedux = React.memo ( function () {
 		const action = addTaskAC ( title, todolistId );
 		dispatch ( action );
 	}, [dispatch] );
-	const changeTaskStatus = useCallback ( ( id : string, isDone : boolean, todolistId : string ) => {
-		const action = changeTaskStatusAC ( id, isDone, todolistId );
+	const changeTaskStatus = useCallback ( ( id : string, status: TaskStatus, todolistId : string ) => {
+		const action = changeTaskStatusAC ( id, status, todolistId );
 		dispatch ( action );
 	}, [dispatch] );
 	const changeTaskTitle = useCallback ( ( id : string, newTitle : string, todolistId : string ) => {
@@ -87,6 +81,7 @@ export const AppWithRedux = React.memo ( function () {
 					{
 						todolists.map ( tl => {
 							let tasksForTodolist = tasks[ tl.id ];
+
 
 							return (
 								<Grid item key={ tl.id }>
