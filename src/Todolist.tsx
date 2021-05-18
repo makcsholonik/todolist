@@ -5,16 +5,12 @@ import { Button, IconButton } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import { FilteredType } from "./AppWithRedux";
 import { Task } from "./Task";
+import { TaskType } from "./api/todolists-api";
 
-export type TasksType = {
+export type TodolistPropsType = {
 	id : string
 	title : string
-	isDone : boolean
-}
-export type TodolistType = {
-	id : string
-	title : string
-	tasks : Array<TasksType>
+	tasks : Array<TaskType>
 	changeTodolistFilter : ( todolistId : string, value : FilteredType ) => void
 	addTask : ( title : string, todolistId : string ) => void
 	filter : FilteredType
@@ -25,7 +21,7 @@ export type TodolistType = {
 	changeTaskTitle : ( id : string, newTitle : string, todolistId : string ) => void
 }
 
-export const Todolist = React.memo ( function ( props : TodolistType ) {
+export const Todolist = React.memo ( function ( props : TodolistPropsType ) {
 	const onAllClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "all" )}, [props.changeTodolistFilter, props.id] );
 	const onActiveClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "active", )}, [props.changeTodolistFilter, props.id] );
 	const onCompletedClickHandler = useCallback ( () => {props.changeTodolistFilter ( props.id, "completed", )}, [props.changeTodolistFilter, props.id] );

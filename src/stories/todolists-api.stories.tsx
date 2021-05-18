@@ -164,16 +164,31 @@ export const DeleteTask = () => {
 
 // export const UpdateTask = () => {
 // 	const [state, setState] = useState<any> ( null )
+// 	const [title, setTitle] = useState<string> ( "" )
+// 	const [description, setDescription] = useState<string> ( "" )
+// 	const [status, setStatus] = useState<number> ( 0 )
+// 	const [priority, setPriority] = useState<number> ( 0 )
+// 	const [startDate, setStartDate] = useState<string> ( "" )
+// 	const [deadline, setDeadline] = useState<string> ( "" )
+// 	const [todolistId, setTodolistId] = useState<string> ( "" )
+// 	const [taskId, setTaskId] = useState<string> ( "" )
+//
 // 	useEffect ( () => {
-// 		const todolistId = "c4a6efde-7003-49ca-a0a6-bcb7b945401d";
-// 		const taskId = "22f23e58-7441-46e9-93ce-0862a4226a27"
-// 		const model = {
 //
-//
-// 		}
-// 		tasksAPI.updateTasks ( todolistId, taskId, model).then ( ( res ) => {
+// 		tasksAPI.updateTasks ( ).then ( ( res ) => {
 // 			setState ( res.data )
 // 		} )
 // 	}, [] )
-// 	return <div> { JSON.stringify ( state ) }</div>
+// 	return <div> { JSON.stringify ( state ) }
+// 		<div>
+// 			<input placeholder={ "todolistId" } value={ todolistId } onChange={ (e) => {setTodolistId ( e.currentTarget.value )} }/>
+// 			<input placeholder={ "taskId" } value={ taskId } onChange={ (e) => {setTaskId ( e.currentTarget.value )} }/>
+// 			<input placeholder={ "title" } value={ title } onChange={ (e) => {setTitle ( e.currentTarget.value )} }/>
+// 			<input placeholder={ "description" } value={ description } onChange={ (e) => {setDescription ( e.currentTarget.value )} }/>
+// 			<input placeholder={ "status" } value={ status } onChange={ (e) => {setStatus ( +e.currentTarget.value )} }/>
+// 			<input placeholder={ "priority" } value={ priority } onChange={ (e) => {setPriority ( +e.currentTarget.value )} }/>
+// 			<input placeholder={ "startDate" } value={ startDate } onChange={ (e) => {setStartDate ( e.currentTarget.value )} }/>
+// 			<input placeholder={ "deadline" } value={ deadline } onChange={ (e) => {setDeadline ( e.currentTarget.value )} }/>
+// 		</div>
+// 	</div>
 // }

@@ -51,12 +51,27 @@ export const todolistAPI = {
 	}
 }
 
-type TaskType = {
+export enum TaskStatuses {
+	New = 0,
+	InProgress = 1,
+	Completed = 2,
+	Draft = 3
+}
+
+export enum TaskPriority {
+	Low = 0,
+	Middle = 1,
+	Hi = 2,
+	Urgently = 3,
+	Later = 4
+}
+
+export type TaskType = {
 	description : string
 	title : string
 	completed : boolean
-	status : boolean
-	priority : number
+	status : TaskStatuses
+	priority : TaskPriority
 	startDate : string
 	deadline : string
 	id : string
@@ -74,7 +89,6 @@ type GetTasksResponse = {
 export type TaskModelType = {
 	title : string
 	description : string
-	completed : true,
 	status : number
 	priority : number
 	startDate : string
@@ -91,7 +105,7 @@ export const tasksAPI = {
 	deleteTasks ( todolistId : string, taskId : string ) {
 		return instanse.delete<ResponseType> ( `todo-lists/${ todolistId }/tasks/${ taskId }` );
 	},
-// 	updateTasks ( todolistId : string, taskId : string, model : TaskModelType ) {
-// 		return instanse.put<ResponseType> ( `todo-lists/${ todolistId }/tasks/${ taskId }`, { model } );
-// 	}
+	// 	updateTasks ( todolistId : string, taskId : string, model : TaskModelType ) {
+	// 		return instanse.put<ResponseType> ( `todo-lists/${ todolistId }/tasks/${ taskId }`, { model } );
+	// 	}
 }
