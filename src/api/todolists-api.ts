@@ -1,4 +1,5 @@
 import axios from "axios";
+import { FilteredType } from "../state/todolists-reducer";
 
 const instanse = axios.create ( {
 	baseURL : "https://social-network.samuraijs.com/api/1.1/",
@@ -6,13 +7,14 @@ const instanse = axios.create ( {
 	headers : {
 		"API-KEY" : "f0cc0942-0306-4a5b-86b9-c3852c7f7cf3"
 	}
-} )
+} );
 
 export type TodolistType = {
 	id : string
 	addedDate : string
 	order : string
 	title : string
+	filter : FilteredType // support нет в документации
 }
 
 type ResponseType<D = {}> = {
@@ -28,17 +30,17 @@ export const todolistAPI = {
 	},
 	createTodolist ( title : string ) {
 		const promise = instanse.post<ResponseType<{ item : TodolistType }>> ( "todo-lists", { title } );
-		return promise
+		return promise;
 	},
 	deleteTodolist ( id : string ) {
 		const promise = instanse.delete<ResponseType> ( `todo-lists/${ id }` );
-		return promise
+		return promise;
 	},
 	updateTodolist ( id : string, title : string ) {
 		const promise = instanse.put<ResponseType> ( `todo-lists/${ id }`, { title } );
-		return promise
+		return promise;
 	}
-}
+};
 
 export enum TaskStatus {
 	New = 0,
@@ -88,13 +90,13 @@ export const tasksAPI = {
 	getTasks ( todolistId : string ) {
 		return instanse.get<GetTasksResponse> ( `todo-lists/${ todolistId }/tasks` );
 	},
-	createTasks ( todolistId : string, title : string ) {
-		return instanse.post<ResponseType> ( `todo-lists/${ todolistId }/tasks`, { title } );
+	createTask ( todolistId : string, title : string ) {
+		return instanse.post<ResponseType<TaskType>> ( `todo-lists/${ todolistId }/tasks`, { title } );
 	},
-	deleteTasks ( todolistId : string, taskId : string ) {
+	deleteTask ( todolistId : string, taskId : string ) {
 		return instanse.delete<ResponseType> ( `todo-lists/${ todolistId }/tasks/${ taskId }` );
 	},
-	// 	updateTasks ( todolistId : string, taskId : string, model : TaskModelType ) {
-	// 		return instanse.put<ResponseType> ( `todo-lists/${ todolistId }/tasks/${ taskId }`, { model } );
-	// 	}
-}
+	updateTask ( todolistId : string, taskId : string, model : TaskModelType ) {
+		return instanse.put<ResponseType> ( `todo-lists/${ todolistId }/tasks/${ taskId }`, { model } );
+	}
+};

@@ -1,190 +1,64 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import './App.css';
-import { v1 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
 import { AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
-import { TaskPriority, TaskStatus, TaskType } from "./api/todolists-api";
-import { FilteredType, TodolistDomainType } from "./state/todolists-reducer";
-import { Todolist } from "./Todolist";
-
+import {
+	addTodolistAC,
+	changeTodolistFilterAC,
+	changeTodolistTitleAC,
+	FilteredType,
+	removeTodolistAC
+} from "./state/todolists-reducer";
+import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from "./state/tasks-reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { AppRootStateType } from "./state/store";
+import { Todolist } from './Todolist';
+import { TaskStatus, TaskType, TodolistType } from "./api/todolists-api";
 
 export type TaskStateType = {
 	[ key : string ] : Array<TaskType>
 }
 
-function App () {
+export const App = React.memo ( function () {
 
-	const todolistId1 = v1 ();
-	const todolistId2 = v1 ();
-	// массив тудулистов
-	const [todolists, setTodolists] = useState<Array<TodolistDomainType>> ( [
-		{
-			id : todolistId1, title : "What to learn", filter : "all", addedDate : '',
-			order : '0'
-		},
-		{
-			id : todolistId2, title : "What to bye", filter : "all", addedDate : '',
-			order : '0'
-		},
-	] )
-	// ассоциативный массив
-	const [tasks, setTasks] = useState<TaskStateType> ( {
-		[ todolistId1 ] : [
-			{
-				id : v1 (),
-				title : "HTML",
-				status : TaskStatus.Completed,
-				todoListId : todolistId1,
-				description : '',
-				startDate : '',
-				deadline : '',
-				addedDate : '',
-				order : 0,
-				priority : TaskPriority.Low,
-				completed : false
-			},
-			{
-				id : v1 (),
-				title : "CSS",
-				status : TaskStatus.New,
-				todoListId : todolistId1,
-				description : '',
-				startDate : '',
-				deadline : '',
-				addedDate : '',
-				order : 0,
-				priority : TaskPriority.Low,
-				completed : false
-			},
-			{
-				id : v1 (),
-				title : "JavaScript",
-				status : TaskStatus.New,
-				todoListId : todolistId1,
-				description : '',
-				startDate : '',
-				deadline : '',
-				addedDate : '',
-				order : 0,
-				priority : TaskPriority.Low,
-				completed : false
-			},
-		],
-		[ todolistId2 ] : [
-			{
-				id : v1 (),
-				title : "Book",
-				status : TaskStatus.Completed,
-				todoListId : todolistId2,
-				description : '',
-				startDate : '',
-				deadline : '',
-				addedDate : '',
-				order : 0,
-				priority : TaskPriority.Low,
-				completed : false
-			},
-			{
-				id : v1 (),
-				title : "Pen",
-				status : TaskStatus.New,
-				todoListId : todolistId2,
-				description : '',
-				startDate : '',
-				deadline : '',
-				addedDate : '',
-				order : 0,
-				priority : TaskPriority.Low,
-				completed : false
-			},
-			{
-				id : v1 (),
-				title : "Notebook",
-				status : TaskStatus.Completed,
-				todoListId : todolistId2,
-				description : '',
-				startDate : '',
-				deadline : '',
-				addedDate : '',
-				order : 0,
-				priority : TaskPriority.Low,
-				completed : false
-			},
-		],
-	} )
+	const todolists = useSelector<AppRootStateType, Array<TodolistType>> ( state => state.todolist );
+	console.log (todolists);
+	const tasks = useSelector<AppRootStateType, TaskStateType> ( state => state.tasks );
+	const dispatch = useDispatch ();
 
-	function removeTask ( id : string, todolistId : string ) {
-		let todolistTasks = tasks[ todolistId ];
-		tasks[ todolistId ] = todolistTasks.filter ( t => t.id !== id );
-		setTasks ( { ...tasks } );
-	}
-	function addTask ( title : string, todolistId : string ) {
-		let todolistTasks = tasks[ todolistId ];
-		let newTask = {
-			id : v1 (),
-			title : title,
-			status : TaskStatus.New,
-			todoListId : todolistId,
-			description : '',
-			startDate : '',
-			deadline : '',
-			addedDate : '',
-			order : 0,
-			priority : TaskPriority.Low,
-			completed : false
-		};
-		tasks[ todolistId ] = [newTask, ...todolistTasks];
-		setTasks ( { ...tasks } );
-	}
-	function changeTaskStatus ( id : string, status : TaskStatus, todolistId : string ) {
-		// достаём нужный массив по todolistId
-		let todolistTasks = tasks[ todolistId ];
-		// найдём нужную таску
-		let task = todolistTasks.find ( t => t.id === id );
-		// изменим таску если она нашлась
-		if (task) {
-			task.status = status;
-		}
-		setTasks ( { ...tasks } );
-	}
-	function changeTaskTitle ( id : string, newTitle : string, todolistId : string ) {
-		let todolistTasks = tasks[ todolistId ];
-		let task = todolistTasks.find ( t => t.id === id );
-		if (task) {
-			task.title = newTitle;
-		}
-		setTasks ( { ...tasks } );
-	}
-
-	function removeTodolist ( id : string ) {
-		let filteredTodolist = todolists.filter ( tl => tl.id !== id );
-		setTodolists ( filteredTodolist );
-		delete tasks[ id ];
-		setTasks ( { ...tasks } );
-	}
-	function addTodolist ( title : string ) {
-		let todolist : TodolistDomainType = { id : v1 (), filter : "all", title : title, addedDate : '', order : '0' };
-		setTodolists ( [todolist, ...todolists] );
-		setTasks ( {
-			...tasks,
-			[ todolist.id ] : []
-		} )
-	}
-	function changeTodolistTitle ( id : string, title : string ) {
-		const todolist = todolists.find ( tl => tl.id === id );
-		if (todolist) {
-			todolist.title = title;
-			setTodolists ( [...todolists] );
-		}
-	}
-	function changeTodolistFilter ( id : string, filter : FilteredType ) {
-		let todolistFilter = todolists.find ( tl => tl.id === id );
-		if (todolistFilter) {
-			todolistFilter.filter = filter;
-			setTodolists ( [...todolists] );
-		}
-	}
+	const removeTask = useCallback ( ( id : string, todolistId : string ) => {
+		const action = removeTaskAC ( id, todolistId );
+		dispatch ( action );
+	}, [dispatch] );
+	const addTask = useCallback ( ( title : string, todolistId : string ) => {
+		const action = addTaskAC ( title, todolistId );
+		dispatch ( action );
+	}, [dispatch] );
+	const changeTaskStatus = useCallback ( ( id : string, status: TaskStatus, todolistId : string ) => {
+		const action = changeTaskStatusAC ( id, status, todolistId );
+		dispatch ( action );
+	}, [dispatch] );
+	const changeTaskTitle = useCallback ( ( id : string, newTitle : string, todolistId : string ) => {
+		const action = changeTaskTitleAC ( id, newTitle, todolistId );
+		dispatch ( action );
+	}, [dispatch] );
+	const removeTodolist = useCallback ( ( id : string ) => {
+		const action = removeTodolistAC ( id );
+		dispatch ( action );
+	}, [dispatch] );
+	const addTodolist = useCallback ( ( title : string ) => {
+		const action = addTodolistAC ( title );
+		dispatch ( action );
+	}, [dispatch] );
+	const changeTodolistTitle = useCallback ( ( id : string, title : string ) => {
+		const action = changeTodolistTitleAC ( id, title );
+		dispatch ( action );
+	}, [dispatch] );
+	const changeTodolistFilter = useCallback ( ( id : string, filter : FilteredType ) => {
+		const action = changeTodolistFilterAC ( id, filter );
+		dispatch ( action );
+	}, [dispatch] );
 
 	return (
 		<div className="App">
@@ -206,19 +80,13 @@ function App () {
 				<Grid container spacing={ 2 }>
 					{
 						todolists.map ( tl => {
-							let allTodolistTasks = tasks[ tl.id ]
-							let tasksForTodolist = allTodolistTasks;
-							if (tl.filter === "completed") {
-								tasksForTodolist = allTodolistTasks.filter ( t => t.status === TaskStatus.New );
-							}
-							if (tl.filter === "active") {
-								tasksForTodolist = allTodolistTasks.filter ( t => t.status === TaskStatus.Completed );
-							}
+							let tasksForTodolist = tasks[ tl.id ];
+
 							return (
-								<Grid item>
+								<Grid item key={ tl.id }>
 									<Paper style={ { padding : "10px" } }>
 										<Todolist
-											key={ tl.id } // обязательно при .map
+											key={ tl.id }
 											id={ tl.id }
 											title={ tl.title }
 											tasks={ tasksForTodolist }
@@ -240,5 +108,4 @@ function App () {
 			</Container>
 		</div>
 	);
-}
-
+} );

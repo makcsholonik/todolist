@@ -5,7 +5,7 @@ import { Button, IconButton } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import { Task } from "./Task";
 import { TaskStatus, TaskType } from "./api/todolists-api";
-import { FilteredType, TodolistDomainType } from "./state/todolists-reducer";
+import { FilteredType } from "./state/todolists-reducer";
 
 export type TodolistPropsType = {
 	id : string

@@ -6,7 +6,7 @@ import {
 	changeTodolistFilterAC
 } from './todolists-reducer';
 import { v1 } from 'uuid';
-import { TodolistType, FilteredType } from '../AppWithRedux';
+import { TodolistType, FilteredType } from '../App';
 
 
 let todolistId1 : string;
