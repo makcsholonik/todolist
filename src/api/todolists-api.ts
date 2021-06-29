@@ -12,7 +12,7 @@ const instanse = axios.create ( {
 export type TodolistType = {
 	id : string
 	addedDate : string
-	order : string
+	order : number
 	title : string
 	filter : FilteredType // support нет в документации
 }
